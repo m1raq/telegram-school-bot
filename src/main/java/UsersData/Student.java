@@ -9,20 +9,18 @@ import lombok.Setter;
 @Setter
 @Table(name = "students")
 @Entity
-public class Registration {
+public class Student {
 
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
-    private String name;
-
+    
     private int year;
 
-    @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "enum")
-    private GroupType groupType;
+    private String classType;
 
+    @Column(name = "username_tg")
+    private String tgUsername;
 
 }
