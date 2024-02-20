@@ -11,6 +11,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class TelegramBot extends TelegramLongPollingBot {
 
 
@@ -154,6 +155,11 @@ public class TelegramBot extends TelegramLongPollingBot {
         } catch (TelegramApiException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    protected void getLastNews(){
+
+
     }
 
 }
