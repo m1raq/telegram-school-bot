@@ -145,6 +145,16 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
     }
 
+    protected void hello(String chatId, Update update){
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.setChatId(chatId);
+        sendMessage.setText("С возвращением, " + update.getMessage().getFrom().getFirstName());
+        try {
+            this.execute(sendMessage);
+        } catch (TelegramApiException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 }
 
