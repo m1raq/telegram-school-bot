@@ -29,8 +29,6 @@ public class AddNewsToSQL {
                 e.printStackTrace();
 
             }
-        } else {
-            return;
         }
 
     }

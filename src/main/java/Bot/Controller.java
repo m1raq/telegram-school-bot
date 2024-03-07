@@ -22,23 +22,22 @@ public class Controller implements Runnable {
             String tgUsername = update.getMessage().getFrom().getUserName();
 
 
-            Object resultSet = ConnectionToUsersSQL.connection()
+            if (ConnectionToUsersSQL.connection()
                     .createQuery("SELECT tgUsername FROM Student WHERE tgUsername = '" + tgUsername + "'")
-                    .uniqueResult();
-
-            if (resultSet == null) {
+                    .uniqueResult() == null) {
 
                 switch (message) {
                     case "/start" -> telegramBot.selectClass(chatId);
                     case "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11" -> telegramBot.selectClassType(chatId, message);
                     case "А", "Б", "В" -> telegramBot.endReg(message, chatId, tgUsername);
-                    default -> telegramBot.wrongMessage(chatId);
+                    default -> telegramBot.nonReg(chatId);
 
                 }
             } else {
                 switch (message) {
                     case "/start" -> telegramBot.hello(chatId, update);
-                    case "/news" -> telegramBot.sendLastNews(chatId, update);
+                    case "/news" -> telegramBot.sendLastNews(chatId);
+                    default -> telegramBot.wrongMessage(chatId);
                 }
             }
         }

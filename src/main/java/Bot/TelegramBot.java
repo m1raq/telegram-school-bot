@@ -18,10 +18,8 @@ import java.util.List;
 
 public class TelegramBot extends TelegramLongPollingBot {
 
-
     private String regClass;
     private int regYear;
-
 
     @Override
     public String getBotUsername() {
@@ -149,6 +147,17 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
     }
 
+    protected void nonReg(String chatId){
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.setChatId(chatId);
+        sendMessage.setText("Вы не зарегистрированы! Для регистрации введите /start");
+        try {
+            this.execute(sendMessage);
+        } catch (TelegramApiException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     protected void hello(String chatId, Update update) {
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(chatId);
@@ -163,7 +172,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     protected String getLastNews() throws IOException {
         try {
             ConnectionToNewsSQL.connection();
-        }catch (Exception e){
+        }catch (NullPointerException e){
             e.getCause();
         }
         return ConnectionToNewsSQL
@@ -173,7 +182,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
 
-    protected void sendLastNews(String chatId, Update update)  {
+    protected void sendLastNews(String chatId)  {
 
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(chatId);

@@ -14,7 +14,6 @@ public class News {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-
     private String data;
 
 

@@ -19,6 +19,7 @@ public class ConnectionToNewsSQL {
                 .build();
 
         Metadata metadata = new MetadataSources(registry).getMetadataBuilder().build();
+
         SessionFactory sessionFactory = metadata.getSessionFactoryBuilder().build();
 
         return sessionFactory.openSession();
