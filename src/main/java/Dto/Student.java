@@ -1,4 +1,4 @@
-package UsersData;
+package Dto;
 
 import jakarta.persistence.*;
 import lombok.Getter;

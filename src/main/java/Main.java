@@ -1,5 +1,6 @@
 import Bot.TelegramBot;
-import Connection.ConnectionToSQL;
+import Connection.ConnectionToNewsSQL;
+import Connection.ConnectionToUsersSQL;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
@@ -9,8 +10,10 @@ public class Main {
 
         TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
         telegramBotsApi.registerBot(new TelegramBot());
-//        ConnectionToSQL.connection();
-//        ConnectionToSQL.connection().close();
+//        ConnectionToUsersSQL.connection();
+//        ConnectionToUsersSQL.connection().close();
+//        ConnectionToNewsSQL.connection();
+//        ConnectionToNewsSQL.connection().close();
     }
 
 }

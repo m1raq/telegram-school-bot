@@ -7,7 +7,7 @@ import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 
-public class ConnectionToSQL {
+public class ConnectionToNewsSQL {
 
 
     private static final Session session = initializeSession();
@@ -15,7 +15,7 @@ public class ConnectionToSQL {
     private static Session initializeSession(){
 
         StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
-                .configure("hibernate.cfg.xml")
+                .configure("news.cfg.xml")
                 .build();
 
         Metadata metadata = new MetadataSources(registry).getMetadataBuilder().build();
@@ -28,7 +28,6 @@ public class ConnectionToSQL {
     public static Session connection(){
         return session;
     }
-
 
 
 }

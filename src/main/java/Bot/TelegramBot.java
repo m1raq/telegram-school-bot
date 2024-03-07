@@ -1,5 +1,6 @@
 package Bot;
 import Connection.AddStudentToSQL;
+import Connection.ConnectionToNewsSQL;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -8,16 +9,19 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardRem
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
 
 
 public class TelegramBot extends TelegramLongPollingBot {
 
 
-
     private String regClass;
     private int regYear;
+
 
     @Override
     public String getBotUsername() {
@@ -33,13 +37,12 @@ public class TelegramBot extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
 
-        Thread requestHandlerThread = new Thread(new BotRequestHandler(this, update));
+        Thread requestHandlerThread = new Thread(new Controller(this, update));
         requestHandlerThread.start();
     }
 
 
-
-    protected void removeKeyboard(String chatId){
+    protected void removeKeyboard(String chatId) {
         regYear = 0;
         regClass = "";
 
@@ -60,7 +63,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     }
 
-    protected void selectClass(String chatId){
+    protected void selectClass(String chatId) {
 
         ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
         List<KeyboardRow> keyboard = new ArrayList<>();
@@ -95,7 +98,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     }
 
-    protected void selectClassType(String chatId, String message){
+    protected void selectClassType(String chatId, String message) {
 
         regYear = Integer.parseInt(message);
 
@@ -123,7 +126,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
     }
 
-    protected void endReg(String message, String chatId, String tgUsername){
+    protected void endReg(String message, String chatId, String tgUsername) {
         regClass = message;
 
         AddStudentToSQL.add(regYear, regClass, tgUsername);
@@ -135,7 +138,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         removeKeyboard(chatId);
     }
 
-    protected void wrongMessage(String chatId){
+    protected void wrongMessage(String chatId) {
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(chatId);
         sendMessage.setText("Неизвестная команда");
@@ -146,7 +149,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
     }
 
-    protected void hello(String chatId, Update update){
+    protected void hello(String chatId, Update update) {
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(chatId);
         sendMessage.setText("С возвращением, " + update.getMessage().getFrom().getFirstName());
@@ -157,11 +160,38 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
     }
 
-    protected void getLastNews(){
+    protected String getLastNews() throws IOException {
+        try {
+            ConnectionToNewsSQL.connection();
+        }catch (Exception e){
+            e.getCause();
+        }
+        return ConnectionToNewsSQL
+                .connection()
+                .createQuery("SELECT data FROM News ORDER BY id DESC LIMIT 1 ")
+                .getSingleResult().toString();
+    }
 
+
+    protected void sendLastNews(String chatId, Update update)  {
+
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.setChatId(chatId);
+        try {
+            sendMessage.setText(getLastNews());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            this.execute(sendMessage);
+        } catch (TelegramApiException e) {
+            throw new RuntimeException(e);
+        }
 
     }
 
 }
+
+
 
 
