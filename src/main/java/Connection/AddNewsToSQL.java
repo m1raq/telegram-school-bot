@@ -8,17 +8,17 @@ public class AddNewsToSQL {
 
     public static void add(Update update){
 
-        ConnectionToNewsSQL.connection();
+        ConnectionToSQL.connection();
         Transaction transaction = null;
 
         if(update.getChannelPost().isChannelMessage()){
 
             try {
-                transaction = ConnectionToNewsSQL.connection().beginTransaction();
+                transaction = ConnectionToSQL.connection().beginTransaction();
                 News news = new News();
 
                 news.setData(update.getChannelPost().getText());
-                ConnectionToNewsSQL.connection().save(news);
+                ConnectionToSQL.connection().save(news);
 
                 transaction.commit();
             } catch (Exception e){

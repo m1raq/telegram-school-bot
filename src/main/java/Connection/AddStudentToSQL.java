@@ -7,20 +7,20 @@ public class AddStudentToSQL {
 
     public static void add(int year, String type, String tgId) {
 
-        ConnectionToUsersSQL.connection();
+        ConnectionToSQL.connection();
 
         Transaction transaction = null;
 
         try {
 
-            transaction = ConnectionToUsersSQL.connection().beginTransaction();
+            transaction = ConnectionToSQL.connection().beginTransaction();
 
             Student registration = new Student();
             registration.setYear(year);
             registration.setClassType(type);
             registration.setTgUsername(tgId);
 
-            ConnectionToUsersSQL.connection().save(registration);
+            ConnectionToSQL.connection().save(registration);
 
             transaction.commit();
         } catch (Exception e) {

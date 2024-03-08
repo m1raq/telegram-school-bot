@@ -1,6 +1,6 @@
 package Bot;
 import Connection.AddNewsToSQL;
-import Connection.ConnectionToUsersSQL;
+import Connection.ConnectionToSQL;
 import lombok.AllArgsConstructor;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
@@ -22,7 +22,7 @@ public class Controller implements Runnable {
             String tgUsername = update.getMessage().getFrom().getUserName();
 
 
-            if (ConnectionToUsersSQL.connection()
+            if (ConnectionToSQL.connection()
                     .createQuery("SELECT tgUsername FROM Student WHERE tgUsername = '" + tgUsername + "'")
                     .uniqueResult() == null) {
 
@@ -37,6 +37,7 @@ public class Controller implements Runnable {
                 switch (message) {
                     case "/start" -> telegramBot.hello(chatId, update);
                     case "/news" -> telegramBot.sendLastNews(chatId);
+                    case "/teachers" -> telegramBot.sendTeachers(chatId);
                     default -> telegramBot.wrongMessage(chatId);
                 }
             }

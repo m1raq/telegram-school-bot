@@ -1,6 +1,7 @@
 package Bot;
 import Connection.AddStudentToSQL;
-import Connection.ConnectionToNewsSQL;
+import Connection.ConnectionToSQL;
+import Dto.Teacher;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -169,18 +170,21 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
     }
 
-    protected String getLastNews() throws IOException {
-        try {
-            ConnectionToNewsSQL.connection();
-        }catch (NullPointerException e){
-            e.getCause();
-        }
-        return ConnectionToNewsSQL
+    private String getLastNews() throws IOException {
+
+        return ConnectionToSQL
                 .connection()
-                .createQuery("SELECT data FROM News ORDER BY id DESC LIMIT 1 ")
+                .createQuery("SELECT data FROM News ORDER BY id DESC LIMIT 1")
                 .getSingleResult().toString();
     }
 
+    private List<Teacher> getTeachers(){
+
+        return ConnectionToSQL
+                .connection()
+                .createQuery("SELECT * FROM Teacher", Teacher.class)
+                .getResultList();
+    }
 
     protected void sendLastNews(String chatId)  {
 
@@ -199,6 +203,23 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     }
 
+    protected void sendTeachers(String chatId){
+        StringBuilder stringBuilder = new StringBuilder();
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.setChatId(chatId);
+
+        getTeachers().forEach(teacher -> stringBuilder.append(teacher.getName())
+                .append(" - ")
+                .append(teacher.getCabinet())
+                .append(" каб."));
+
+        sendMessage.setText(stringBuilder.toString());
+        try {
+            this.execute(sendMessage);
+        } catch (TelegramApiException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
 
 

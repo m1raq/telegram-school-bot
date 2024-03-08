@@ -5,7 +5,7 @@
     <session-factory>
         <!-- JDBC Database connection settings -->
         <property name="connection.driver_class">com.mysql.cj.jdbc.Driver</property>
-        <property name="connection.url">jdbc:mysql://localhost:3306/news?useSSL=false</property>
+        <property name="connection.url">jdbc:mysql://localhost:3306/school28?useSSL=false</property>
         <property name="connection.username">root</property>
         <property name="connection.password">Dl2305_</property>
         <!-- JDBC connection pool settings ... using built-in test pool -->
@@ -20,5 +20,7 @@
         <property name="hbm2ddl.auto">update</property>
 
         <mapping class="Dto.News"></mapping>
+        <mapping class="Dto.Teacher"></mapping>
+        <mapping class="Dto.Student"></mapping>
     </session-factory>
 </hibernate-configuration>
