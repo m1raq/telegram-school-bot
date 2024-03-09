@@ -182,7 +182,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         return ConnectionToSQL
                 .connection()
-                .createQuery("SELECT * FROM Teacher", Teacher.class)
+                .createQuery("SELECT t FROM Teacher t", Teacher.class)
                 .getResultList();
     }
 
@@ -208,10 +208,12 @@ public class TelegramBot extends TelegramLongPollingBot {
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(chatId);
 
-        getTeachers().forEach(teacher -> stringBuilder.append(teacher.getName())
+        getTeachers().forEach(teacher -> stringBuilder.append("•")
+                .append(teacher.getName())
                 .append(" - ")
                 .append(teacher.getCabinet())
-                .append(" каб."));
+                .append(" каб.")
+                .append("\n"));
 
         sendMessage.setText(stringBuilder.toString());
         try {
